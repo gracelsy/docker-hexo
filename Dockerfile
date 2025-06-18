@@ -1,26 +1,24 @@
-# 使用官方 Node.js 20 Alpine 版本作为基础镜像，体积小且轻量
+# 选择官方轻量 Node.js 20 Alpine 镜像作为基础
 FROM node:20-alpine
 
-# 安装 git，Hexo 部署和版本控制常用
+# 安装 git
 RUN apk add --no-cache git
 
-# 全局安装 Hexo 命令行工具（hexo-cli），提供 hexo 命令
+# 全局安装 hexo-cli，提供 hexo 命令
 RUN npm install -g hexo-cli
 
 # 设置容器内工作目录，挂载项目代码后默认路径
 WORKDIR /app
 
-# 声明容器监听的端口，Hexo 默认服务端口 4000
+# 容器对外暴露 Hexo 默认端口
 EXPOSE 4000
 
-# 设置时区环境变量，默认上海时区
+# 设置默认时区环境变量
 ENV TZ=Asia/Shanghai
 
-# 设置 Git 用户名环境变量，容器运行时可传入实际值
-ENV GIT_USER="gracelsy"
+# 设置 Git 用户和邮箱环境变量（容器启动时可通过 -e 覆盖）
+ENV GIT_USER=""
+ENV GIT_EMAIL=""
 
-# 设置 Git 邮箱环境变量，容器运行时可传入实际值
-ENV GIT_EMAIL="zyszyhzylsy@qq.com"
-
-# 容器启动后默认进入 shell，方便手动执行命令（如 npm install、hexo server）
-CMD ["sh"]
+# 使用 ENTRYPOINT 指定容器启动后默认进入 sh shell
+ENTRYPOINT ["sh"]
